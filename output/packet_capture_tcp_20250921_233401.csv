@@ -1,0 +1,3 @@
+Timestamp,SourceIP,DestinationIP,SourcePort,DestinationPort,Protocol,PacketLength,Direction,TCPFlags,ApplicationGuess
+"2025-09-21 23:34:01.441","192.168.1.100","93.184.216.34",52341,443,"TCP",64,"Outgoing","SYN","HTTPS"
+"2025-09-21 23:34:01.441","192.168.1.100","216.58.194.174",45678,80,"TCP",1024,"Outgoing","ACK PSH","HTTP"

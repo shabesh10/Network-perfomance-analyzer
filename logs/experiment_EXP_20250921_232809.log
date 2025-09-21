@@ -1,0 +1,29 @@
+=== EXPERIMENT LOG ===
+Experiment ID: EXP_20250921_232809
+Generated: 2025-09-21 23:28:10.023
+
+=== SYSTEM DETAILS ===
+OS Name: Windows 10
+OS Version: 10.0
+OS Architecture: amd64
+Total Memory: 128.00 MB
+Free Memory: 125.21 MB
+Available Processors: 4
+Java Version: 17.0.11
+Java Vendor: Oracle Corporation
+
+=== EXPERIMENT DETAILS ===
+Start Time: 2025-09-21 23:28:09.707
+End Time: 2025-09-21 23:28:09.834
+Duration: 0 seconds
+
+=== SUMMARY STATISTICS ===
+Total Packets: 80
+Unique Source IPs: 2
+Unique Destination IPs: 1
+
+Protocol Distribution:
+  TCP: 72 (90.0%)
+  UDP: 8 (10.0%)
+
+Experiment log saved to: logs/experiment_EXP_20250921_232809.log
