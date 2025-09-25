@@ -23,7 +23,15 @@ echo.
 echo Press any key to continue or Ctrl+C to cancel...
 pause >nul
 
+REM Prefer a user-specified Java (e.g., 32-bit JRE) if provided
+set "JAVA_EXE=%JAVA_EXE%"
+if "%JAVA_EXE%"=="" set "JAVA_EXE=java"
+
+REM Add native DLL directory to PATH for this process
+set "DLL_DIR=lib\jpcap-0.01.16-win32\lib"
+if exist "%DLL_DIR%" set "PATH=%CD%\%DLL_DIR%;%PATH%"
+
 REM Run the PacketCapture program
-java -cp "lib\net.sourceforge.jpcap-0.01.16.jar;classes" PacketCapture
+"%JAVA_EXE%" -cp "lib\net.sourceforge.jpcap-0.01.16.jar;classes" PacketCapture
 
 pause
