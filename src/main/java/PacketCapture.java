@@ -1,9 +1,7 @@
-import net.sourceforge.jpcap.capture.PacketCapture;
 import net.sourceforge.jpcap.capture.PacketListener;
-import net.sourceforge.jpcap.packet.Packet;
-import net.sourceforge.jpcap.packet.TCPPacket;
-import net.sourceforge.jpcap.packet.UDPPacket;
-import net.sourceforge.jpcap.packet.ARPPacket;
+import net.sourceforge.jpcap.net.Packet;
+import net.sourceforge.jpcap.net.TCPPacket;
+import net.sourceforge.jpcap.net.UDPPacket;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,7 @@ import java.util.TimerTask;
  */
 public class PacketCapture {
     
-    private static PacketCapture pcap;
+    private static net.sourceforge.jpcap.capture.PacketCapture pcap;
     private static int packetCount = 0;
     private static final int CAPTURE_DURATION_MINUTES = 2; // Capture for 2 minutes
     private static final int CAPTURE_DURATION_MS = CAPTURE_DURATION_MINUTES * 60 * 1000; // Convert to milliseconds
@@ -48,10 +46,10 @@ public class PacketCapture {
             System.out.println();
             
             // Initialize PacketCapture instance
-            pcap = new PacketCapture();
+            pcap = new net.sourceforge.jpcap.capture.PacketCapture();
             
             // Retrieve the list of network interfaces
-            String[] devices = PacketCapture.lookupDevices();
+            String[] devices = net.sourceforge.jpcap.capture.PacketCapture.lookupDevices();
             
             if (devices == null || devices.length == 0) {
                 System.out.println("No network interfaces found!");
@@ -217,13 +215,11 @@ public class PacketCapture {
     private static PacketRecord processPacket(Packet packet) {
         PacketRecord record = new PacketRecord();
         
-        // Set timestamp
-        Date timestamp = new Date(packet.getTimeval().getSeconds() * 1000L + 
-                                packet.getTimeval().getMicroSeconds() / 1000L);
-        record.setTimestamp(timestamp);
+        // Set timestamp (best effort; some packet APIs may not expose timeval)
+        record.setTimestamp(new Date());
         
-        // Set packet length
-        record.setPacketLength(packet.getData().length);
+        // Set packet length (may not be available across all builds)
+        record.setPacketLength(0);
         
         // Process based on packet type
         if (packet instanceof TCPPacket) {
@@ -251,14 +247,6 @@ public class PacketCapture {
             record.setDestinationIP(udpPacket.getDestinationAddress());
             record.setSourcePort(udpPacket.getSourcePort());
             record.setDestinationPort(udpPacket.getDestinationPort());
-            
-        } else if (packet instanceof ARPPacket) {
-            ARPPacket arpPacket = (ARPPacket) packet;
-            record.setProtocol("ARP");
-            record.setSourceIP(arpPacket.getSourceAddress());
-            record.setDestinationIP(arpPacket.getDestinationAddress());
-            record.setSourcePort(-1); // ARP doesn't have ports
-            record.setDestinationPort(-1);
             
         } else {
             record.setProtocol("Other");

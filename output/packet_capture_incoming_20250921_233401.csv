@@ -1,3 +1,0 @@
-Timestamp,SourceIP,DestinationIP,SourcePort,DestinationPort,Protocol,PacketLength,Direction,TCPFlags,ApplicationGuess
-"2025-09-21 23:34:01.441","192.168.1.1","192.168.1.100",53,12345,"UDP",84,"Incoming","","DNS"
-"2025-09-21 23:34:01.441","192.168.1.50","192.168.1.100",-1,-1,"ARP",42,"Incoming","","Unknown"
