@@ -61,11 +61,20 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo Compiling LocalhostSimulator.java...
-javac -cp "%CP%" -d classes src\main\java\LocalhostSimulator.java
+echo Compiling RealTimePacketCapture.java...
+javac -cp "%CP%" -d classes src\main\java\RealTimePacketCapture.java
 
 if %errorlevel% neq 0 (
-    echo Compilation of LocalhostSimulator.java failed!
+    echo Compilation of RealTimePacketCapture.java failed!
+    pause
+    exit /b 1
+)
+
+echo Compiling ModernPacketCapture.java...
+javac -cp "%CP%" -d classes src\main\java\ModernPacketCapture.java
+
+if %errorlevel% neq 0 (
+    echo Compilation of ModernPacketCapture.java failed!
     pause
     exit /b 1
 )
@@ -74,7 +83,9 @@ echo.
 echo Compilation successful!
 echo You can now run the programs using:
 echo   - run-list.bat (for ListInterfaces)
-echo   - run-capture.bat (for PacketCapture)
+echo   - run-capture.bat (for PacketCapture - requires native libs)
+echo   - run-localhost-sim.bat (for RealTimePacketCapture - requires native libs)
+echo   - run-modern-capture.bat (for ModernPacketCapture - NO native libs needed)
 echo   - run.bat (to choose which program to run)
 
 pause

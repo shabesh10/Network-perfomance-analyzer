@@ -273,9 +273,15 @@ public class PacketRecord {
      * Returns a compact string representation for logging
      */
     public String toCompactString() {
-        return String.format("[%s] %s %s:%d -> %s:%d (%s, %d bytes, %s, %s)", 
-                           timestamp, direction, sourceIP, sourcePort, 
-                           destinationIP, destinationPort, protocol, 
-                           packetLength, applicationGuess);
+        return String.format("[%s] %s %s:%d -> %s:%d (%s, %d bytes, %s)", 
+                           timestamp != null ? timestamp.toString() : "Unknown", 
+                           direction != null ? direction : "Unknown", 
+                           sourceIP != null ? sourceIP : "Unknown", 
+                           sourcePort, 
+                           destinationIP != null ? destinationIP : "Unknown", 
+                           destinationPort, 
+                           protocol != null ? protocol : "Unknown", 
+                           packetLength, 
+                           applicationGuess != null ? applicationGuess : "Unknown");
     }
 }

@@ -1,5 +1,5 @@
 @echo off
-echo Running Localhost Packet Simulation...
+echo Running Real-Time Localhost Packet Capture...
 
 REM Check if classes directory exists
 if not exist "classes" (
@@ -9,10 +9,11 @@ if not exist "classes" (
     exit /b 1
 )
 
-REM Run the localhost simulation (no native libs required)
-java -cp "classes" LocalhostSimulator
+REM Run the real-time packet capture (requires JPcap library)
+java -Djava.library.path="lib/jpcap-0.01.16-win32/lib" -cp "lib/net.sourceforge.jpcap-0.01.16.jar;classes" RealTimePacketCapture
 
 echo.
-echo Simulation complete! Check output/captured_packets.csv
-echo This file is ready for Power BI import.
+echo Real-time capture complete!
+echo Single CSV file created: output/captured_packets.csv
+echo This file contains REAL network packet data and is ready for Power BI import.
 pause

@@ -1,11 +1,14 @@
-# Network Interface Lister & Packet Capture
+# Network Interface Lister & Real-Time Packet Capture
 
-A Java application that lists network interfaces and captures live packets using the JPcap library.
+A Java application that lists network interfaces and captures live packets using the JPcap library, with CSV export functionality for Power BI analysis.
 
 ## Features
 
 1. **ListInterfaces.java** - Lists all available network interfaces with index, name, and description
 2. **PacketCapture.java** - Captures live packets and displays packet type (TCP, UDP, ARP), source IP, destination IP, port numbers, and timestamp
+3. **RealTimePacketCapture.java** - **NEW**: Real-time packet capture that captures actual network traffic and saves to CSV files in output folder
+4. **CsvExporter.java** - Exports captured packet data to Power BI-compatible CSV files
+5. **PacketRecord.java** - Data structure for storing detailed packet information
 
 ## Prerequisites
 
@@ -26,28 +29,30 @@ A Java application that lists network interfaces and captures live packets using
 
 ### Windows:
 ```cmd
-# Compile both programs
+# Compile all programs
 compile.bat
 
 # Run the main menu
 run.bat
 
 # Or run individual programs
-run-list.bat      # List network interfaces
-run-capture.bat   # Capture live packets (requires admin)
+run-list.bat           # List network interfaces
+run-capture.bat        # Capture live packets (requires admin)
+run-localhost-sim.bat  # Real-time packet capture with CSV export to output folder
 ```
 
 ### Linux/Mac:
 ```bash
-# Compile both programs
+# Compile all programs
 ./compile.sh
 
 # Run the main menu
 ./run.sh
 
 # Or run individual programs
-./run-list.sh     # List network interfaces
-./run-capture.sh  # Capture live packets (requires sudo)
+./run-list.sh          # List network interfaces
+./run-capture.sh       # Capture live packets (requires sudo)
+./run-localhost-sim.sh # Real-time packet capture with CSV export to output folder
 ```
 
 ## Manual Compilation
@@ -72,13 +77,32 @@ java -cp "lib/jpcap.jar:classes" PacketCapture
 
 ## Usage
 
-The program will automatically:
+### Network Interface Listing
+The ListInterfaces program will automatically:
 1. Detect all available network interfaces
 2. Display each interface with:
    - Index number
    - Name
    - Description
    - Additional details (addresses, MTU, etc.)
+
+### Real-Time Packet Capture (RealTimePacketCapture)
+The RealTimePacketCapture program captures **real network packets** from your system:
+
+1. **Captures live network traffic** for 2 minutes (configurable)
+2. **Filters localhost-related packets** automatically
+3. **Exports to Power BI-compatible CSV** files in the `output/` directory
+4. **Provides detailed analysis** including:
+   - Protocol breakdown (TCP/UDP)
+   - Traffic direction (Incoming/Outgoing)
+   - Application identification by port
+   - Timestamp and packet details
+
+#### CSV Output File (saved to output folder):
+- `captured_packets.csv` - Single file optimized for Power BI import containing all packet data
+
+#### Power BI Integration:
+The CSV file is formatted with UTF-8 BOM encoding and proper headers for seamless Power BI import. Simply import `captured_packets.csv` from the output folder into Power BI for network traffic analysis and visualization.
 
 ## Troubleshooting
 
