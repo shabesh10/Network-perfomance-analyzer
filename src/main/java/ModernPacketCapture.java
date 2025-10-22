@@ -137,7 +137,7 @@ public class ModernPacketCapture {
     }
     
     /**
-     * Creates a packet record based on detected network activity
+     * Creates a packet record based on detected network activity with enhanced analytics data
      */
     private static PacketRecord createNetworkActivityRecord(NetworkInterface networkInterface) {
         PacketRecord record = new PacketRecord();
@@ -155,18 +155,43 @@ public class ModernPacketCapture {
             }
         }
         
-        // Create realistic network activity
-        String[] commonRemoteIPs = {
-            "8.8.8.8", "1.1.1.1", "208.67.222.222", "74.125.224.72", // DNS/Google
-            "151.101.193.140", "104.16.249.249", "172.217.164.110", // CDNs
-            "52.84.223.92", "54.230.87.15" // AWS/CloudFront
+        // Enhanced network activity with more realistic patterns for analytics
+        String[] webServices = {
+            "8.8.8.8", "1.1.1.1", "208.67.222.222", // DNS
+            "74.125.224.72", "172.217.164.110", // Google
+            "151.101.193.140", "104.16.249.249", // CDNs
+            "52.84.223.92", "54.230.87.15", // AWS/CloudFront
+            "13.107.42.14", "40.96.147.153", // Microsoft
+            "157.240.12.35", "31.13.64.35" // Facebook/Meta
         };
         
-        int[] commonPorts = {80, 443, 53, 8080, 8443, 3000, 5000};
+        // More diverse port usage for better analytics
+        int[] webPorts = {80, 443, 8080, 8443};
+        int[] devPorts = {3000, 3001, 4000, 5000, 8000, 9000};
+        int[] dbPorts = {3306, 5432, 1433, 27017};
+        int[] systemPorts = {53, 22, 25, 110, 143};
         
-        boolean isOutgoing = Math.random() > 0.5;
-        String remoteIP = commonRemoteIPs[(int)(Math.random() * commonRemoteIPs.length)];
-        int port = commonPorts[(int)(Math.random() * commonPorts.length)];
+        boolean isOutgoing = Math.random() > 0.4; // 60% outgoing traffic
+        String remoteIP = webServices[(int)(Math.random() * webServices.length)];
+        
+        // Choose port based on traffic type
+        int port;
+        String trafficType;
+        double rand = Math.random();
+        
+        if (rand < 0.4) { // 40% web traffic
+            port = webPorts[(int)(Math.random() * webPorts.length)];
+            trafficType = "Web";
+        } else if (rand < 0.6) { // 20% development traffic
+            port = devPorts[(int)(Math.random() * devPorts.length)];
+            trafficType = "Development";
+        } else if (rand < 0.75) { // 15% database traffic
+            port = dbPorts[(int)(Math.random() * dbPorts.length)];
+            trafficType = "Database";
+        } else { // 25% system traffic
+            port = systemPorts[(int)(Math.random() * systemPorts.length)];
+            trafficType = "System";
+        }
         
         if (isOutgoing) {
             record.setSourceIP(localIP);
@@ -182,12 +207,36 @@ public class ModernPacketCapture {
             record.setDirection("Incoming");
         }
         
-        record.setProtocol(Math.random() > 0.8 ? "UDP" : "TCP");
-        record.setPacketLength(64 + (int)(Math.random() * 1000));
+        // Protocol distribution: 80% TCP, 20% UDP
+        record.setProtocol(Math.random() > 0.2 ? "TCP" : "UDP");
+        
+        // Realistic packet sizes based on traffic type
+        int baseSize = 64;
+        if (trafficType.equals("Web")) {
+            baseSize = 200 + (int)(Math.random() * 1200); // Web pages
+        } else if (trafficType.equals("Database")) {
+            baseSize = 100 + (int)(Math.random() * 800); // DB queries
+        } else if (trafficType.equals("Development")) {
+            baseSize = 50 + (int)(Math.random() * 500); // Dev traffic
+        } else {
+            baseSize = 32 + (int)(Math.random() * 200); // System traffic
+        }
+        record.setPacketLength(baseSize);
         
         if ("TCP".equals(record.getProtocol())) {
-            String[] tcpFlags = {"SYN", "ACK", "SYN ACK", "FIN", "PSH ACK"};
-            record.setTcpFlags(tcpFlags[(int)(Math.random() * tcpFlags.length)]);
+            // More realistic TCP flag distribution
+            String[] tcpFlags = {"SYN", "ACK", "SYN ACK", "PSH ACK", "FIN ACK", "RST"};
+            double[] flagProbability = {0.1, 0.4, 0.2, 0.2, 0.05, 0.05}; // ACK most common
+            
+            double flagRand = Math.random();
+            double cumulative = 0;
+            for (int i = 0; i < flagProbability.length; i++) {
+                cumulative += flagProbability[i];
+                if (flagRand <= cumulative) {
+                    record.setTcpFlags(tcpFlags[i]);
+                    break;
+                }
+            }
         }
         
         record.guessApplication();

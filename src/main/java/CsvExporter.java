@@ -14,7 +14,7 @@ import java.util.Date;
 public class CsvExporter {
     
     private static final String OUTPUT_DIR = "output";
-    private static final String CSV_HEADER = "Timestamp,SourceIP,DestinationIP,SourcePort,DestinationPort,Protocol,PacketLength,Direction,TCPFlags,ApplicationGuess";
+    private static final String CSV_HEADER = "Timestamp,SourceIP,DestinationIP,SourcePort,DestinationPort,Protocol,PacketLength,Direction,TCPFlags,ApplicationGuess,TrafficCategory,ConnectionStatus,GeographicRegion,BytesPerSecond,SecurityLevel";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     
     /**
@@ -127,7 +127,22 @@ public class CsvExporter {
         csvLine.append("\"").append(escapeCsvField(record.getTcpFlags())).append("\",");
         
         // Application Guess
-        csvLine.append("\"").append(escapeCsvField(record.getApplicationGuess())).append("\"");
+        csvLine.append("\"").append(escapeCsvField(record.getApplicationGuess())).append("\",");
+        
+        // Traffic Category
+        csvLine.append("\"").append(escapeCsvField(record.getTrafficCategory())).append("\",");
+        
+        // Connection Status
+        csvLine.append("\"").append(escapeCsvField(record.getConnectionStatus())).append("\",");
+        
+        // Geographic Region
+        csvLine.append("\"").append(escapeCsvField(record.getGeographicRegion())).append("\",");
+        
+        // Bytes Per Second
+        csvLine.append(record.getBytesPerSecond()).append(",");
+        
+        // Security Level
+        csvLine.append("\"").append(escapeCsvField(record.getSecurityLevel())).append("\"");
         
         return csvLine.toString();
     }
@@ -327,7 +342,22 @@ public class CsvExporter {
         csvLine.append("\"").append(escapeCsvField(tcpFlags.isEmpty() ? "" : tcpFlags)).append("\",");
         
         // Application Guess
-        csvLine.append("\"").append(escapeCsvField(record.getApplicationGuess())).append("\"");
+        csvLine.append("\"").append(escapeCsvField(record.getApplicationGuess())).append("\",");
+        
+        // Traffic Category
+        csvLine.append("\"").append(escapeCsvField(record.getTrafficCategory())).append("\",");
+        
+        // Connection Status
+        csvLine.append("\"").append(escapeCsvField(record.getConnectionStatus())).append("\",");
+        
+        // Geographic Region
+        csvLine.append("\"").append(escapeCsvField(record.getGeographicRegion())).append("\",");
+        
+        // Bytes Per Second
+        csvLine.append(record.getBytesPerSecond()).append(",");
+        
+        // Security Level
+        csvLine.append("\"").append(escapeCsvField(record.getSecurityLevel())).append("\"");
         
         return csvLine.toString();
     }
